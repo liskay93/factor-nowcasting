@@ -25,12 +25,21 @@
 | Ensemble | (A+B)/2 | |
 | 벤치마크 | 확장창 평균 · AR(1) · **OLS** y_q = c + φ y_{q−1} + b'F_q | OLS 는 B 의 완전분기 점예측과 같은 식(재매개화)이라 OOS RMSE 가 거의 같다 |
 
+## 언스무딩 (보고 수익률 → 진짜 수익률)
+
+Geltner AR(p): `r*_t = (y_t − Σθ_i y_{t−i}) / (1 − Σθ_i)`. **차수·θ 는 `config/nowcast.yaml` 의 `unsmoothing` 에서 시리즈별로 바꾼다** —
+`order: 0` 조정 없음, `1` 교과서 Geltner, `2+` 고차, `theta: [..]` 를 주면 추정 대신 고정. 현재 설정: 사모주식·부동산 에쿼티 1, 헤지펀드·채권·상장·인프라 0.
+진단 근거(PACF·AIC/BIC·Ljung-Box)는 `reports/unsmoothing_order.csv`. 실행은 `python scripts/run_unsmooth.py` →
+`data/processed/unsmoothed_returns.csv` (시리즈), `unsmoothed_returns_by_label.csv` (엑셀 21 라벨), `unsmoothing_params.csv` (θ·vol 배수).
+nowcast 모델 B 는 이와 별개로 θ 를 팩터와 같이 추정한다 (차수 1 고정).
+
 ## 실행
 
 ```bash
 pip install -r requirements.txt
 python scripts/run_backtest.py      # 확장창 OOS 백테스트 → data/processed/backtest_*.csv   (~40초)
 python scripts/run_nowcast.py       # 최신 nowcast → data/processed/nowcast_*.csv, model_*_full.csv
+python scripts/run_unsmooth.py      # 언스무딩 수익률 (config unsmoothing 차수 적용)
 python scripts/make_report.py       # 그림 + reports/nowcast_report.md
 python scripts/make_notebook.py && jupyter nbconvert --to notebook --execute --inplace notebooks/report.ipynb
 python -m pytest -q                 # 집계 정합성 · ridge=OLS · 상태공간 항등식/모수 복원

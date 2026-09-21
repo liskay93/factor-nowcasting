@@ -45,3 +45,26 @@ backtest:
 
 nowcast:
   asof: null                  # null = 팩터 데이터 마지막 날짜
+
+# 보고 수익률 언스무딩 (Geltner AR(p)):  r*_t = (y_t − Σ_{i=1..p} θ_i y_{t−i}) / (1 − Σθ_i)
+#   order: 0 = 조정 안 함 / 1 = 교과서 Geltner / 2+ = 고차 (필요하면 올리면 된다)
+#   theta: null 이면 전체 표본 AR(p) OLS 로 추정, 숫자(리스트)를 주면 그 값으로 고정
+#   진단 근거: reports/unsmoothing_order.csv (PACF·AIC/BIC·Ljung-Box)
+unsmoothing:
+  default_order: 0
+  series:
+    buyout:        {order: 1}      # 잔차 LB p=0.008 → lag2 남음. 올리려면 2
+    vc:            {order: 1}
+    fof_secondary: {order: 1}
+    fof_primary:   {order: 1}
+    senior_loan:   {order: 0}
+    mezzanine:     {order: 1}
+    apac_equity:   {order: 1}
+    hfri_fof_cons: {order: 0}      # 사용자 결정 (θ≈0.20, 유의 경계)
+    msci_gpfi:     {order: 1}      # AR(1) 이 정확히 맞음
+    re_noncore:    {order: 1}      # 잔차 LB p<0.001 → 연간 감정 주기(lag 4) 남음. 올리려면 4
+    gl1:           {order: 0}
+    gl2:           {order: 0}
+    epra_nareit:   {order: 0}
+    infra_core:    {order: 0}      # ac1 0.12 비유의. 보수적으로 1 도 가능
+    ftse_fi_infra: {order: 0}
