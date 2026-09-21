@@ -189,3 +189,42 @@ def plot_rolling_beta_compare(rb_a: pd.DataFrame, rb_b: pd.DataFrame, order: lis
     fig.suptitle(f"20-quarter rolling beta to {factor}: reported vs unsmoothed", x=0.01, ha="left", fontsize=10)
     fig.tight_layout()
     _save(fig, path)
+
+
+def plot_theta_paths(th: pd.DataFrame, path: Path, ncols: int = 3):
+    order = list(th.columns); n = len(order); nrows = int(np.ceil(n / ncols))
+    fig, axes = plt.subplots(nrows, ncols, figsize=(3.7 * ncols, 2.0 * nrows), sharex=True, sharey=True)
+    axes = np.atleast_1d(axes).ravel()
+    for ax, c in zip(axes, order):
+        s = th[c].dropna()
+        ax.plot(s.index, s.values, color=PAL["s2"], linewidth=1.6)
+        ax.axhline(0, color=PAL["ink2"], linewidth=0.8)
+        ax.set_title(c, loc="left"); ax.set_ylim(-0.05, 1.0)
+    for ax in axes[n:]:
+        ax.axis("off")
+    fig.suptitle("time-varying Geltner theta_t (trailing rolling AR(1), clipped to [0, 0.95])", x=0.01, ha="left", fontsize=10)
+    fig.tight_layout()
+    _save(fig, path)
+
+
+def plot_beta_method_compare(rb_ols: pd.DataFrame, rb_seq: pd.DataFrame, order: list[str], factor: str, path: Path,
+                             rq: pd.Series | None = None, ncols: int = 3):
+    n = len(order); nrows = int(np.ceil(n / ncols))
+    fig, axes = plt.subplots(nrows, ncols, figsize=(3.8 * ncols, 2.2 * nrows), sharex=True)
+    axes = np.atleast_1d(axes).ravel()
+    for ax, c in zip(axes, order):
+        for rb, lab, col in [(rb_ols, "joint OLS", PAL["s1"]), (rb_seq, "sequential (priority)", PAL["s3"])]:
+            if (c, factor) in rb.columns:
+                s = rb[(c, factor)].dropna(); ax.plot(s.index, s.values, color=col, linewidth=1.5, label=lab)
+        ax.axhline(0, color=PAL["ink2"], linewidth=0.8)
+        if rq is not None:
+            for t in rq[rq == "침체"].index:
+                ax.axvspan(t - pd.offsets.QuarterEnd(1), t, color=PAL["grid"], alpha=0.6, linewidth=0)
+        ax.set_title(c, loc="left")
+    for ax in axes[n:]:
+        ax.axis("off")
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.01))
+    fig.suptitle(f"20-quarter rolling beta to {factor} (unsmoothed, time-varying theta): joint OLS vs priority-ordered", x=0.01, ha="left", fontsize=10)
+    fig.tight_layout()
+    _save(fig, path)

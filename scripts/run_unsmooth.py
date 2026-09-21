@@ -25,6 +25,12 @@ def main(argv=None) -> int:
     r.to_csv(out / "unsmoothed_returns.csv", float_format="%.8g")
     to_labels(r, alt.meta).to_csv(out / "unsmoothed_returns_by_label.csv", float_format="%.8g")
     params.to_csv(out / "unsmoothing_params.csv", float_format="%.6g")
+    th_t = params.attrs.get("theta_t")
+    if th_t is not None:
+        th_t.index.name = "date"
+        th_t.to_csv(out / "unsmoothing_theta_t.csv", float_format="%.4f")
+        from src.altnow.eda_plots import plot_theta_paths
+        plot_theta_paths(th_t, resolve(cfg["paths"]["reports"]) / "figs" / "theta_t.png")
     pd.set_option("display.width", 220)
     print(params[["order", "theta", "sum_theta", "vol_reported_ann", "vol_unsmoothed_ann", "vol_mult",
                   "ac1_reported", "ac1_unsmoothed", "lb4_p_unsmoothed", "n"]].round(3).to_string())

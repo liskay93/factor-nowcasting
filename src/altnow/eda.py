@@ -139,3 +139,44 @@ def rolling_betas(df: pd.DataFrame, fq: pd.DataFrame, window: int = 20, min_obs:
     res = pd.concat(out, axis=1)
     res.index.name = "date"
     return res
+
+
+def sequential_betas_window(y: np.ndarray, F: np.ndarray, order: list[int]) -> np.ndarray:
+    """한 창 안에서 팩터를 order 순서로 Gram-Schmidt 직교화한 뒤 OLS. 반환: 원 팩터 순서의 베타.
+    1순위 팩터의 베타 = 단일회귀 베타. k순위 베타 = 앞 팩터들을 뺀 잔차 성분에 대한 베타."""
+    n, k = F.shape
+    Fc = F - F.mean(0)
+    yc = y - y.mean()
+    Q = np.zeros_like(Fc)
+    for j, idx in enumerate(order):
+        v = Fc[:, idx].copy()
+        for m in range(j):
+            q = Q[:, m]
+            v -= (q @ Fc[:, idx]) / (q @ q) * q
+        Q[:, j] = v
+    b_orth = np.array([(Q[:, j] @ yc) / (Q[:, j] @ Q[:, j]) for j in range(k)])
+    out = np.full(k, np.nan)
+    for j, idx in enumerate(order):
+        out[idx] = b_orth[j]
+    return out
+
+
+def sequential_rolling_betas(df: pd.DataFrame, fq: pd.DataFrame, priority: dict, window: int = 20, min_obs: int = 16) -> pd.DataFrame:
+    """시리즈별 우선순위(priority[code] = 팩터 이름 리스트)로 순차 직교화 롤링 베타."""
+    out = {}
+    cols = list(fq.columns)
+    for c in df.columns:
+        order = [cols.index(f) for f in priority.get(c, priority.get("default", cols))]
+        d = pd.concat([df[c].rename("y"), fq], axis=1).dropna()
+        rows = {}
+        for i in range(len(d)):
+            w = d.iloc[max(0, i - window + 1): i + 1]
+            if len(w) < min_obs:
+                continue
+            b = sequential_betas_window(w["y"].values, w[cols].values, order)
+            rows[d.index[i]] = dict(zip(cols, b)) | {"n": len(w)}
+        if rows:
+            out[c] = pd.DataFrame(rows).T
+    res = pd.concat(out, axis=1)
+    res.index.name = "date"
+    return res
