@@ -135,3 +135,57 @@ def plot_small_multiples(R: dict[str, pd.DataFrame], order: list[str], path: Pat
     fig.suptitle("cumulative index (log, base 100)" if kind == "level" else "12-quarter rolling annualised vol", x=0.01, ha="left", fontsize=10)
     fig.tight_layout()
     _save(fig, path)
+
+
+FACTOR_COLOR = {"growth": PAL["s1"], "term": PAL["s2"], "inflation": PAL["s3"], "credit": PAL["s4"]}
+
+
+def plot_rolling_betas(rb: pd.DataFrame, order: list[str], factors: list[str], path: Path, title: str,
+                       rq: pd.Series | None = None, ncols: int = 3):
+    """시리즈별 패널, 팩터별 선 (색 고정). rb = rolling_betas() 결과."""
+    n = len(order); nrows = int(np.ceil(n / ncols))
+    fig, axes = plt.subplots(nrows, ncols, figsize=(3.8 * ncols, 2.2 * nrows), sharex=True)
+    axes = np.atleast_1d(axes).ravel()
+    for ax, c in zip(axes, order):
+        if c not in rb.columns.get_level_values(0):
+            ax.axis("off"); continue
+        for f in factors:
+            s = rb[(c, f)].dropna()
+            ax.plot(s.index, s.values, color=FACTOR_COLOR[f], linewidth=1.5, label=f)
+        ax.axhline(0, color=PAL["ink2"], linewidth=0.8)
+        if rq is not None:
+            for t in rq[rq == "침체"].index:
+                ax.axvspan(t - pd.offsets.QuarterEnd(1), t, color=PAL["grid"], alpha=0.6, linewidth=0)
+        ax.set_title(c, loc="left")
+    for ax in axes[n:]:
+        ax.axis("off")
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, loc="upper center", ncol=len(factors), bbox_to_anchor=(0.5, 1.01))
+    fig.suptitle(title, x=0.01, ha="left", fontsize=10)
+    fig.tight_layout()
+    _save(fig, path)
+
+
+def plot_rolling_beta_compare(rb_a: pd.DataFrame, rb_b: pd.DataFrame, order: list[str], factor: str, path: Path,
+                              rq: pd.Series | None = None, ncols: int = 3):
+    """한 팩터에 대한 롤링 베타, 보고 vs 언스무딩 비교."""
+    n = len(order); nrows = int(np.ceil(n / ncols))
+    fig, axes = plt.subplots(nrows, ncols, figsize=(3.8 * ncols, 2.2 * nrows), sharex=True)
+    axes = np.atleast_1d(axes).ravel()
+    for ax, c in zip(axes, order):
+        for rb, base in [(rb_a, "reported"), (rb_b, "unsmoothed")]:
+            if (c, factor) in rb.columns:
+                s = rb[(c, factor)].dropna()
+                ax.plot(s.index, s.values, color=BASE_COLOR[base], linewidth=1.5, label=BASE_NAME[base])
+        ax.axhline(0, color=PAL["ink2"], linewidth=0.8)
+        if rq is not None:
+            for t in rq[rq == "침체"].index:
+                ax.axvspan(t - pd.offsets.QuarterEnd(1), t, color=PAL["grid"], alpha=0.6, linewidth=0)
+        ax.set_title(c, loc="left")
+    for ax in axes[n:]:
+        ax.axis("off")
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.01))
+    fig.suptitle(f"20-quarter rolling beta to {factor}: reported vs unsmoothed", x=0.01, ha="left", fontsize=10)
+    fig.tight_layout()
+    _save(fig, path)

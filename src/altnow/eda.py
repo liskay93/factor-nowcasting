@@ -117,3 +117,25 @@ def factor_betas(R: dict[str, pd.DataFrame], fq: pd.DataFrame, rq: pd.DataFrame 
 
 def rolling_vol(df: pd.DataFrame, window: int = 12) -> pd.DataFrame:
     return df.rolling(window, min_periods=window).std() * 2
+
+
+def rolling_betas(df: pd.DataFrame, fq: pd.DataFrame, window: int = 20, min_obs: int = 16) -> pd.DataFrame:
+    """분기 롤링 OLS 베타 (창 = window 분기, 창 끝 날짜에 매김). 반환: MultiIndex 컬럼 (code, factor|const|r2)."""
+    out = {}
+    for c in df.columns:
+        d = pd.concat([df[c].rename("y"), fq], axis=1).dropna()
+        rows = {}
+        for i in range(len(d)):
+            w = d.iloc[max(0, i - window + 1): i + 1]
+            if len(w) < min_obs:
+                continue
+            X = np.column_stack([np.ones(len(w)), w[fq.columns].values])
+            coef, *_ = np.linalg.lstsq(X, w["y"].values, rcond=None)
+            yhat = X @ coef
+            r2 = 1 - ((w["y"].values - yhat) ** 2).sum() / ((w["y"].values - w["y"].mean()) ** 2).sum()
+            rows[d.index[i]] = dict(zip(["const"] + list(fq.columns), coef)) | {"r2": r2, "n": len(w)}
+        if rows:
+            out[c] = pd.DataFrame(rows).T
+    res = pd.concat(out, axis=1)
+    res.index.name = "date"
+    return res
