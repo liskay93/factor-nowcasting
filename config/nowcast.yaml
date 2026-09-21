@@ -1,0 +1,47 @@
+# 대체투자 nowcasting 설정. 매크로 팩터는 macro_factor 저장소(읽기 전용)에서 가져온다.
+paths:
+  macro_factor_root: ../macro_factor          # 환경변수 MACRO_FACTOR_ROOT 가 있으면 그것을 우선
+  factor_file: data/processed/factors.csv     # 확정 표본(4팩터 공통, 2006-02~). 3팩터 장기 표본은 factors_maxspan.csv
+  alt_returns: data/raw/alt_returns_bm.xlsx
+  alt_sheet: "값"
+  processed: data/processed
+  reports: reports
+
+factors: [growth, term, inflation, credit]     # 부호: term + = 금리↓, inflation + = BEI↑, credit + = 스프레드↓
+
+# 엑셀의 21개 라벨 중 원지수가 같은 것은 하나의 시리즈로 모델링하고 결과를 라벨로 되돌린다.
+series:
+  buyout:         {index: "Burgiss Buyout Index",                                        group: PE,    labels: [Buyout]}
+  vc:             {index: "Burgiss Venture Capital Index",                               group: PE,    labels: [Growth, "Venture Capital"]}
+  fof_secondary:  {index: "Burgiss FoF Secondary Equity Index",                          group: PE,    labels: ["Fund of Fund", "GP-Stake / Continuation Vehicle"]}
+  fof_primary:    {index: "Burgiss FoF Primary Equity Index",                            group: PE,    labels: ["Long-term Core"]}
+  senior_loan:    {index: "Burgiss Senior Loan Index",                                   group: PE,    labels: ["Senior Credit"]}
+  mezzanine:      {index: "Burgiss Mezzanine Index",                                     group: PE,    labels: ["Junior Credit"]}
+  apac_equity:    {index: "Burgiss Equity Index (Asia & Pacific)",                       group: PE,    labels: ["국내 사모투자"]}
+  hfri_fof_cons:  {index: "HFRI FoF: Conservative Index",                                group: HF,    labels: ["Hedge Fund"]}
+  msci_gpfi:      {index: "MSCI Global Property Fund Index",                             group: RE,    labels: ["Core RE Equity", "국내 부동산"]}
+  re_noncore:     {index: "Burgiss Real Estate Equity Index (value-add, Opportunistic)", group: RE,    labels: ["Non-Core RE Equity"]}
+  gl1:            {index: "Giliberto-Levy Commercial Mortgage Performance Index (G-L 1)", group: RE,   labels: ["Core RE Debt"]}
+  gl2:            {index: "Giliberto-Levy High-Yield Real Estate Debt Index (G-L 2)",    group: RE,    labels: ["Non-Core RE Debt"]}
+  epra_nareit:    {index: "FTSE EPRA/NAREIT Developed Index",                            group: RE,    labels: ["Listed RE"]}
+  infra_core:     {index: "Burgiss Infrastructure Equity Index (Core)",                  group: INFRA, labels: ["Core 국내 인프라", "Non-Core 국내 인프라", "Core 해외 인프라", "Non-Core 해외 인프라"]}
+  ftse_fi_infra:  {index: "FTSE Fixed Income Core Infrastrue Index",                     group: INFRA, labels: ["Super-Core Infrastructure"]}
+
+model_a:                      # Ridge 분포시차: y_q ~ Σ_{l=0..L} β_l'F_{q-l} + φ y_{q-1}
+  lags: 4                     # 분기 lag 수 (0..L). 보고 지연·평가 스무딩을 lag 계수가 흡수
+  include_ar: true
+  alphas: [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100]   # ridge λ 후보 (표준화된 X 기준)
+  cv_min_train: 20            # λ 선택용 훈련창 내 시간순 CV: 첫 검증점 이전 최소 관측 수
+  standardize: true
+
+model_b:                      # 월간 상태공간: r*_m = α + β'F_m + η_m ;  y_q = θ y_{q-1} + (1-θ) Σ_{m∈q} r*_m + ε_q  (로그수익률)
+  theta_bounds: [0.0, 0.95]
+  use_log: true
+
+backtest:
+  start: "2012-03-31"         # 첫 OOS 예측 분기(분기말). 이전은 훈련
+  min_train_quarters: 20
+  benchmarks: [mean, ar1, ols]      # ols = y ~ 1 + y_{q-1} + F_q (동분기 팩터 OLS)
+
+nowcast:
+  asof: null                  # null = 팩터 데이터 마지막 날짜

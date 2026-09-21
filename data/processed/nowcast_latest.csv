@@ -1,0 +1,42 @@
+code,group,index,quarter,last_reported,h,type,factor_days,ridge_dl,ss_kalman,ss_sd,ensemble
+buyout,PE,Burgiss Buyout Index,2026-06-30,2026-03-31,1,complete,65,0.0606894,0.0700182,0.0244257,0.0653538
+buyout,PE,Burgiss Buyout Index,2026-09-30,2026-03-31,2,partial(QTD),55,0.0396996,0.0441728,0.0244257,0.0419362
+vc,PE,Burgiss Venture Capital Index,2026-06-30,2026-03-31,1,complete,65,0.0722253,0.0838603,0.0361443,0.0780428
+vc,PE,Burgiss Venture Capital Index,2026-09-30,2026-03-31,2,partial(QTD),55,0.0582746,0.0574097,0.0361443,0.0578421
+fof_secondary,PE,Burgiss FoF Secondary Equity Index,2026-06-30,2026-03-31,1,complete,65,0.0469391,0.0532115,0.027551,0.0500753
+fof_secondary,PE,Burgiss FoF Secondary Equity Index,2026-09-30,2026-03-31,2,partial(QTD),55,0.0478093,0.0390623,0.027551,0.0434358
+fof_primary,PE,Burgiss FoF Primary Equity Index,2026-06-30,2026-03-31,1,complete,65,0.0510716,0.0542219,0.0199416,0.0526467
+fof_primary,PE,Burgiss FoF Primary Equity Index,2026-09-30,2026-03-31,2,partial(QTD),55,0.0388632,0.0380106,0.0199416,0.0384369
+senior_loan,PE,Burgiss Senior Loan Index,2026-06-30,2026-03-31,1,complete,65,0.0271488,0.0443088,0.0144846,0.0357288
+senior_loan,PE,Burgiss Senior Loan Index,2026-09-30,2026-03-31,2,partial(QTD),55,0.0181247,0.0183896,0.0144846,0.0182571
+mezzanine,PE,Burgiss Mezzanine Index,2026-06-30,2026-03-31,1,complete,65,0.0477499,0.0424238,0.01805,0.0450869
+mezzanine,PE,Burgiss Mezzanine Index,2026-09-30,2026-03-31,2,partial(QTD),55,0.0275537,0.0304652,0.01805,0.0290094
+apac_equity,PE,Burgiss Equity Index (Asia & Pacific),2026-06-30,2026-03-31,1,complete,65,0.0634989,0.076668,0.0332804,0.0700834
+apac_equity,PE,Burgiss Equity Index (Asia & Pacific),2026-09-30,2026-03-31,2,partial(QTD),55,0.0341441,0.0359708,0.0332804,0.0350574
+hfri_fof_cons,HF,HFRI FoF: Conservative Index,2026-06-30,2026-03-31,1,complete,65,0.0269493,0.0299783,0.0110815,0.0284638
+hfri_fof_cons,HF,HFRI FoF: Conservative Index,2026-09-30,2026-03-31,2,partial(QTD),55,0.0146345,0.0129344,0.0110815,0.0137845
+msci_gpfi,RE,MSCI Global Property Fund Index,2025-03-31,2024-12-31,1,complete,63,0.00884689,0.00857348,0.0209999,0.00871018
+msci_gpfi,RE,MSCI Global Property Fund Index,2025-06-30,2024-12-31,2,complete,65,0.0127684,0.0179811,0.0209999,0.0153747
+msci_gpfi,RE,MSCI Global Property Fund Index,2025-09-30,2024-12-31,3,complete,66,0.0191705,0.0253172,0.0209999,0.0222438
+msci_gpfi,RE,MSCI Global Property Fund Index,2025-12-31,2024-12-31,4,complete,66,0.0156733,0.0192696,0.0209999,0.0174714
+msci_gpfi,RE,MSCI Global Property Fund Index,2026-03-31,2024-12-31,5,complete,63,0.011644,0.0106154,0.0209999,0.0111297
+msci_gpfi,RE,MSCI Global Property Fund Index,2026-06-30,2024-12-31,6,complete,65,0.0287595,0.0281827,0.0209999,0.0284711
+msci_gpfi,RE,MSCI Global Property Fund Index,2026-09-30,2024-12-31,7,partial(QTD),55,0.0206832,0.0227278,0.0209999,0.0217055
+re_noncore,RE,"Burgiss Real Estate Equity Index (value-add, Opportunistic)",2026-06-30,2026-03-31,1,complete,65,0.0221824,0.033013,0.0362031,0.0275977
+re_noncore,RE,"Burgiss Real Estate Equity Index (value-add, Opportunistic)",2026-09-30,2026-03-31,2,partial(QTD),55,0.0255941,0.026603,0.0362031,0.0260985
+gl1,RE,Giliberto-Levy Commercial Mortgage Performance Index (G-L 1),2025-09-30,2025-06-30,1,complete,66,0.0222086,0.0191194,0.00701833,0.020664
+gl1,RE,Giliberto-Levy Commercial Mortgage Performance Index (G-L 1),2025-12-31,2025-06-30,2,complete,66,0.0110756,0.0130009,0.00701833,0.0120383
+gl1,RE,Giliberto-Levy Commercial Mortgage Performance Index (G-L 1),2026-03-31,2025-06-30,3,complete,63,-0.000347878,0.00130636,0.00701833,0.00047924
+gl1,RE,Giliberto-Levy Commercial Mortgage Performance Index (G-L 1),2026-06-30,2025-06-30,4,complete,65,0.0189078,0.0128377,0.00701833,0.0158728
+gl1,RE,Giliberto-Levy Commercial Mortgage Performance Index (G-L 1),2026-09-30,2025-06-30,5,partial(QTD),55,-0.00634877,-0.0082792,0.00701833,-0.00731399
+gl2,RE,Giliberto-Levy High-Yield Real Estate Debt Index (G-L 2),2025-09-30,2025-06-30,1,complete,66,0.0244533,0.0199176,0.0119291,0.0221855
+gl2,RE,Giliberto-Levy High-Yield Real Estate Debt Index (G-L 2),2025-12-31,2025-06-30,2,complete,66,0.018683,0.0206997,0.0119291,0.0196913
+gl2,RE,Giliberto-Levy High-Yield Real Estate Debt Index (G-L 2),2026-03-31,2025-06-30,3,complete,63,0.0205861,0.0198219,0.0119291,0.020204
+gl2,RE,Giliberto-Levy High-Yield Real Estate Debt Index (G-L 2),2026-06-30,2025-06-30,4,complete,65,0.0211243,0.0224379,0.0119291,0.0217811
+gl2,RE,Giliberto-Levy High-Yield Real Estate Debt Index (G-L 2),2026-09-30,2025-06-30,5,partial(QTD),55,0.0220574,0.022302,0.0119291,0.0221797
+epra_nareit,RE,FTSE EPRA/NAREIT Developed Index,2026-06-30,2026-03-31,1,complete,65,0.107486,0.127548,0.0510697,0.117517
+epra_nareit,RE,FTSE EPRA/NAREIT Developed Index,2026-09-30,2026-03-31,2,partial(QTD),55,-0.0299477,-0.00680711,0.0510697,-0.0183774
+infra_core,INFRA,Burgiss Infrastructure Equity Index (Core),2026-06-30,2026-03-31,1,complete,65,0.0324449,0.0583744,0.0295838,0.0454097
+infra_core,INFRA,Burgiss Infrastructure Equity Index (Core),2026-09-30,2026-03-31,2,partial(QTD),55,0.0205113,0.0178334,0.0295838,0.0191724
+ftse_fi_infra,INFRA,FTSE Fixed Income Core Infrastrue Index,2026-06-30,2026-03-31,1,complete,65,-0.00424403,0.00352508,0.00876861,-0.000359474
+ftse_fi_infra,INFRA,FTSE Fixed Income Core Infrastrue Index,2026-09-30,2026-03-31,2,partial(QTD),55,-0.0262602,-0.0284776,0.00876861,-0.0273689

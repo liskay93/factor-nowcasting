@@ -1,0 +1,12 @@
+{
+  "asof": "2026-09-15",
+  "current_quarter_end": "2026-09-30",
+  "current_quarter_days": 55,
+  "current_quarter_complete": false,
+  "qtd_factors": {
+    "growth": 0.010692884752772303,
+    "term": -0.0293145337949553,
+    "inflation": 0.010334169717130193,
+    "credit": -0.0002962032703862638
+  }
+}
