@@ -30,7 +30,9 @@ def main(argv=None) -> int:
         th_t.index.name = "date"
         th_t.to_csv(out / "unsmoothing_theta_t.csv", float_format="%.4f")
         from src.altnow.eda_plots import plot_theta_paths
-        plot_theta_paths(th_t, resolve(cfg["paths"]["reports"]) / "figs" / "theta_t.png")
+        u = cfg.get("unsmoothing") or {}
+        lab = f"{'centered' if u.get('rolling_centered') else 'trailing'} {u.get('rolling_window', 20)}-quarter rolling AR(1)"
+        plot_theta_paths(th_t, resolve(cfg["paths"]["reports"]) / "figs" / "theta_t.png", label=lab)
     pd.set_option("display.width", 220)
     print(params[["order", "theta", "sum_theta", "vol_reported_ann", "vol_unsmoothed_ann", "vol_mult",
                   "ac1_reported", "ac1_unsmoothed", "lb4_p_unsmoothed", "n"]].round(3).to_string())

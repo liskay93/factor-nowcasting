@@ -191,7 +191,7 @@ def plot_rolling_beta_compare(rb_a: pd.DataFrame, rb_b: pd.DataFrame, order: lis
     _save(fig, path)
 
 
-def plot_theta_paths(th: pd.DataFrame, path: Path, ncols: int = 3):
+def plot_theta_paths(th: pd.DataFrame, path: Path, ncols: int = 3, label: str = "rolling AR(1)"):
     order = list(th.columns); n = len(order); nrows = int(np.ceil(n / ncols))
     fig, axes = plt.subplots(nrows, ncols, figsize=(3.7 * ncols, 2.0 * nrows), sharex=True, sharey=True)
     axes = np.atleast_1d(axes).ravel()
@@ -202,7 +202,7 @@ def plot_theta_paths(th: pd.DataFrame, path: Path, ncols: int = 3):
         ax.set_title(c, loc="left"); ax.set_ylim(-0.05, 1.0)
     for ax in axes[n:]:
         ax.axis("off")
-    fig.suptitle("time-varying Geltner theta_t (trailing rolling AR(1), clipped to [0, 0.95])", x=0.01, ha="left", fontsize=10)
+    fig.suptitle(f"time-varying Geltner theta_t ({label}, clipped to [0, 0.95])", x=0.01, ha="left", fontsize=10)
     fig.tight_layout()
     _save(fig, path)
 
