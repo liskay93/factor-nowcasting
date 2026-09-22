@@ -228,3 +228,62 @@ def plot_beta_method_compare(rb_ols: pd.DataFrame, rb_seq: pd.DataFrame, order: 
     fig.suptitle(f"20-quarter rolling beta to {factor} (unsmoothed, time-varying theta): joint OLS vs priority-ordered", x=0.01, ha="left", fontsize=10)
     fig.tight_layout()
     _save(fig, path)
+
+
+def plot_factor_weight_stack(contrib: pd.DataFrame, x: pd.Series, path: Path):
+    """팩터별 가로 누적막대: 자산이 가져오는 w_i β_ik. 합 = x_k (점으로 표시)."""
+    factors = list(contrib.columns); assets = list(contrib.index)
+    cols = [PAL["s1"], PAL["s2"], PAL["s3"], PAL["s4"], PAL["s5"], "#008300", "#4a3aa7", "#e34948"]
+    fig, ax = plt.subplots(figsize=(8.5, 0.55 * len(factors) + 1.8))
+    ys = np.arange(len(factors))[::-1]
+    pos = np.zeros(len(factors)); neg = np.zeros(len(factors))
+    top = contrib.abs().sum(axis=1).sort_values(ascending=False).index[:8]      # 상위 8개 자산만 색, 나머지 Other
+    other = contrib.loc[[a for a in assets if a not in top]].sum()
+    parts = [(a, contrib.loc[a]) for a in top] + ([("other", other)] if len(assets) > 8 else [])
+    for j, (name, row) in enumerate(parts):
+        v = row[factors].values
+        left = np.where(v >= 0, pos, neg + v)
+        ax.barh(ys, np.abs(v), left=left, height=0.62, color=cols[j % 8] if name != "other" else PAL["grid"],
+                label=name, edgecolor=PAL["surface"], linewidth=1.5, zorder=3)
+        pos += np.where(v >= 0, v, 0); neg += np.where(v < 0, v, 0)
+    ax.scatter(x[factors].values, ys, s=60, color=PAL["ink"], zorder=5, marker="|", linewidth=2, label="x = Σ w·β")
+    ax.axvline(0, color=PAL["ink2"], linewidth=0.8)
+    ax.set_yticks(ys); ax.set_yticklabels(factors)
+    ax.set_xlabel("factor weight x = B'w (notional units of each factor portfolio)")
+    ax.legend(loc="lower left", ncol=5, bbox_to_anchor=(0, 1.0), fontsize=8)
+    ax.grid(axis="y", visible=False)
+    _save(fig, path)
+
+
+def plot_factor_weight_ts(xt: pd.DataFrame, path: Path, rq: pd.Series | None = None):
+    fig, ax = plt.subplots(figsize=(8.5, 3.6))
+    for f in xt.columns:
+        ax.plot(xt.index, xt[f], color=FACTOR_COLOR.get(f, PAL["ink2"]), linewidth=1.8, label=f)
+    ax.axhline(0, color=PAL["ink2"], linewidth=0.8)
+    if rq is not None:
+        for t in rq[rq == "침체"].index:
+            ax.axvspan(t - pd.offsets.QuarterEnd(1), t, color=PAL["grid"], alpha=0.6, linewidth=0)
+    ax.set_title("portfolio factor weights x_t = B_t'w (rolling-window betas)", loc="left")
+    ax.legend(loc="lower left", ncol=4, bbox_to_anchor=(0, 1.02))
+    _save(fig, path)
+
+
+def plot_factor_summary(summary: pd.DataFrame, rc_resid_pct: float, path: Path):
+    """3 패널: 팩터 비중 x · 1σ 손익 · RC% (고유 포함)."""
+    factors = list(summary.index)
+    fig, axes = plt.subplots(1, 3, figsize=(11, 0.5 * len(factors) + 1.6), sharey=False)
+    ys = np.arange(len(factors))[::-1]
+    for ax, col, title in zip(axes, ["factor_weight_x", "pnl_1sigma", "RC_pct"],
+                              ["factor weight x", "1σ shock P&L", "risk contribution %"]):
+        v = summary[col].values
+        yy, lab = ys, factors
+        if col == "RC_pct":
+            v = np.r_[v, rc_resid_pct]; yy = np.arange(len(factors) + 1)[::-1]; lab = factors + ["idiosyncratic"]
+        ax.barh(yy, v, height=0.62, color=PAL["s1"], zorder=3)
+        ax.axvline(0, color=PAL["ink2"], linewidth=0.8)
+        ax.set_yticks(yy); ax.set_yticklabels(lab)
+        ax.set_title(title, loc="left"); ax.grid(axis="y", visible=False)
+        if col == "pnl_1sigma":
+            ax.xaxis.set_major_formatter(mt.PercentFormatter(1.0, decimals=1))
+    fig.tight_layout()
+    _save(fig, path)

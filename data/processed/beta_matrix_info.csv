@@ -1,0 +1,16 @@
+code,lambda,r2,n,allowed,resid_vol_ann,start,end
+buyout,10,0.56373,79,"growth,credit,term",0.10637,2006-06-30,2025-12-31
+vc,10,0.27595,79,"growth,credit,term",0.21327,2006-06-30,2025-12-31
+fof_secondary,10,0.33533,79,"growth,credit,term",0.1216,2006-06-30,2025-12-31
+fof_primary,10,0.52204,79,"growth,credit,term",0.12309,2006-06-30,2025-12-31
+senior_loan,10,0.55877,64,"credit,term,growth",0.031275,2010-06-30,2026-03-31
+mezzanine,10,0.70939,79,"credit,growth,term",0.0952,2006-06-30,2025-12-31
+apac_equity,10,0.49905,79,"growth,credit,term",0.11418,2006-06-30,2025-12-31
+hfri_fof_cons,10,0.76771,80,"growth,credit,term",0.025611,2006-06-30,2026-03-31
+msci_gpfi,10,0.32809,66,"term,growth,inflation",0.136,2008-06-30,2024-09-30
+re_noncore,10,0.21817,79,"growth,term,inflation",0.21122,2006-06-30,2025-12-31
+gl1,10,0.81635,54,"term,credit,growth",0.016531,2012-03-31,2025-06-30
+gl2,10,0.025397,54,"credit,term,growth",0.025018,2012-03-31,2025-06-30
+epra_nareit,10,0.74618,80,"growth,term,credit",0.10519,2006-06-30,2026-03-31
+infra_core,10,0.40005,78,"growth,inflation,term",0.065365,2006-12-31,2026-03-31
+ftse_fi_infra,10,0.89373,64,"term,credit,growth",0.02604,2010-06-30,2026-03-31

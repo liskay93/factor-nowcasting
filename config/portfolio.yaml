@@ -1,0 +1,37 @@
+# 팩터 비중 산출 설정. 베타 행렬 B → x = B'w (팩터 비중) · x·σ (1σ 손익) · 오일러 RC.
+# ⚠ portfolios 는 가안(provisional). 실제 SAA 가 오면 weights 만 교체. 라벨은 엑셀 21 라벨 그대로 쓴다.
+
+beta_matrix:
+  basis: unsmoothed          # reported | unsmoothed  (언스무딩 설정은 nowcast.yaml unsmoothing)
+  method: ridge              # ols | ridge
+  lambda: common             # common (전 시리즈 CV MSE 합 최소) | per_series | 숫자 (고정)
+  alphas: [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100]
+  cv_splits: 5               # TimeSeriesSplit
+  standardize: true          # 표준화 팩터 위에서 λ 적용 (macro_factor 결정 6)
+  block: true                # beta_priority 의 앞 n_block 개 팩터만 허용, 나머지 β=0
+  n_block: 3
+  prior: {}                  # 축소 목표. 예 {buyout: {growth: 0.7, credit: 0.2}}. 없으면 0
+  min_obs: 24
+  rolling_window: 20         # x_t 시계열용 롤링 창(분기)
+
+portfolios:
+  equal_label:
+    name: "21 라벨 균등 (가안)"
+    provisional: true
+    weights: equal
+  sample_pe_heavy:
+    name: "예시: PE 50 / 사모대출 20 / 부동산 20 / 인프라 10"
+    provisional: true
+    weights:
+      Buyout: 0.25
+      Growth: 0.05
+      Venture Capital: 0.05
+      Fund of Fund: 0.05
+      Long-term Core: 0.10
+      Senior Credit: 0.12
+      Junior Credit: 0.08
+      Core RE Equity: 0.10
+      Non-Core RE Equity: 0.05
+      Core RE Debt: 0.05
+      Core 해외 인프라: 0.06
+      Super-Core Infrastructure: 0.04
