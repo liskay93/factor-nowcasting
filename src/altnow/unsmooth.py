@@ -43,8 +43,16 @@ def rolling_theta(y: pd.Series, window: int, min_obs: int, lo: float, hi: float,
     y = y.dropna()
     out = pd.Series(np.nan, index=y.index)
     h = window // 2
-    for i in range(len(y)):
-        w = y.iloc[max(0, i - h): i + h + 1] if centered else y.iloc[max(0, i - window + 1): i + 1]
+    n = len(y)
+    for i in range(n):
+        if centered:
+            # 양 끝에서는 창이 잘리므로 반대쪽으로 늘려 길이를 유지한다 (맨 끝 = 사실상 후행창, 맨 앞 = 선행창)
+            i0, i1 = max(0, i - h), min(n, i + h + 1)
+            if i1 - i0 < window:
+                i0 = max(0, i1 - window); i1 = min(n, i0 + window)
+            w = y.iloc[i0:i1]
+        else:
+            w = y.iloc[max(0, i - window + 1): i + 1]
         if len(w) < min_obs:
             continue
         x, z = w.shift(1).iloc[1:].values, w.iloc[1:].values

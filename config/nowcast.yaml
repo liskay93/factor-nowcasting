@@ -99,3 +99,15 @@ beta_priority:
     epra_nareit:   [growth, term, credit, inflation]
     infra_core:    [growth, inflation, term, credit]     # 규제자산·물가연동
     ftse_fi_infra: [term, credit, growth, inflation]
+
+# 대시보드 산출물 (scripts/export_dashboard.py → data/dashboard/, scripts/load_db.py → DB)
+#   beta_timeseries: long 형식 (date, program, factor, basis, method, window, beta). 로데이터로 DB 에 그대로 적재.
+#   beta_latest:     프로그램 × 4팩터 최신 베타 표 (대시보드 표 1)
+#   factor_latest:   4팩터 최신 분기 수익률·QTD (참고 표)
+dashboard:
+  basis: [reported, unsmoothed]     # 시계열에 넣을 기준
+  methods: [ols, priority]          # ols = 동시 OLS, priority = 팩터 우선순위 순차 배분
+  window: 20                        # 롤링 창(분기)
+  table_basis: unsmoothed           # beta_latest 표에 쓸 기본 기준
+  table_method: priority            # beta_latest 표에 쓸 기본 방법
+  db_url_env: ALTNOW_DB_URL         # load_db.py 가 읽는 환경변수 (없으면 sqlite:///data/dashboard/altnow.db)

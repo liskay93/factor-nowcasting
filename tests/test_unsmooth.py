@@ -31,3 +31,13 @@ def test_recovers_true_returns():
     assert abs(th[0] - theta) < 0.05
     r = unsmooth(ys, np.array([theta]))
     assert np.allclose(r.values, true[2:], atol=1e-10)
+
+
+def test_rolling_theta_covers_both_ends():
+    from src.altnow.unsmooth import rolling_theta
+    y = pd.Series(np.random.default_rng(3).normal(size=60))
+    th_c = rolling_theta(y, 20, 12, 0.0, 0.95, centered=True)
+    th_t = rolling_theta(y, 20, 12, 0.0, 0.95, centered=False)
+    assert th_c.notna().all()                       # 중심창: 양 끝 포함 전부 값이 있어야 한다
+    assert np.isclose(th_c.iloc[-1], th_t.iloc[-1])  # 맨 끝은 후행창과 같다
+    assert th_t.iloc[:11].isna().all() and th_t.iloc[11:].notna().all()

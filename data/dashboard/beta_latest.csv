@@ -1,0 +1,22 @@
+program,asof_quarter,r2,n_obs,program_code,group,index_name,growth,term,inflation,credit,basis,method,window_q
+Buyout,2026-03-31,,20,buyout,PE,Burgiss Buyout Index,0.515589,0.264739,0.869859,0.717847,unsmoothed,priority,20
+Core RE Debt,2025-06-30,,20,gl1,RE,Giliberto-Levy Commercial Mortgage Performance Index (G-L 1),0.0247764,0.617362,0.108046,0.19462,unsmoothed,priority,20
+Core RE Equity,2024-12-31,,20,msci_gpfi,RE,MSCI Global Property Fund Index,0.15858,-0.198221,2.71726,-0.907462,unsmoothed,priority,20
+Core 국내 인프라,2026-03-31,,20,infra_core,INFRA,Burgiss Infrastructure Equity Index (Core),0.313781,0.317175,-0.52266,-0.254047,unsmoothed,priority,20
+Core 해외 인프라,2026-03-31,,20,infra_core,INFRA,Burgiss Infrastructure Equity Index (Core),0.313781,0.317175,-0.52266,-0.254047,unsmoothed,priority,20
+Fund of Fund,2026-03-31,,20,fof_secondary,PE,Burgiss FoF Secondary Equity Index,0.511225,0.514345,0.870458,0.0424179,unsmoothed,priority,20
+GP-Stake / Continuation Vehicle,2026-03-31,,20,fof_secondary,PE,Burgiss FoF Secondary Equity Index,0.511225,0.514345,0.870458,0.0424179,unsmoothed,priority,20
+Growth,2026-03-31,,20,vc,PE,Burgiss Venture Capital Index,0.830357,1.02287,-1.86829,0.512586,unsmoothed,priority,20
+Hedge Fund,2026-03-31,,20,hfri_fof_cons,HF,HFRI FoF: Conservative Index,0.111228,-0.00950412,0.0546718,0.24029,unsmoothed,priority,20
+Junior Credit,2026-03-31,,20,mezzanine,PE,Burgiss Mezzanine Index,0.125337,0.0120573,0.612962,0.859621,unsmoothed,priority,20
+Listed RE,2026-03-31,,20,epra_nareit,RE,FTSE EPRA/NAREIT Developed Index,0.959001,1.20712,1.49724,-0.396148,unsmoothed,priority,20
+Long-term Core,2026-03-31,,20,fof_primary,PE,Burgiss FoF Primary Equity Index,0.631256,0.615309,-0.992379,0.102705,unsmoothed,priority,20
+Non-Core RE Debt,2025-06-30,,20,gl2,RE,Giliberto-Levy High-Yield Real Estate Debt Index (G-L 2),-0.0570686,-0.0982655,0.117102,-0.0317925,unsmoothed,priority,20
+Non-Core RE Equity,2026-03-31,,20,re_noncore,RE,"Burgiss Real Estate Equity Index (value-add, Opportunistic)",0.466991,0.818643,3.3134,-4.26728,unsmoothed,priority,20
+Non-Core 국내 인프라,2026-03-31,,20,infra_core,INFRA,Burgiss Infrastructure Equity Index (Core),0.313781,0.317175,-0.52266,-0.254047,unsmoothed,priority,20
+Non-Core 해외 인프라,2026-03-31,,20,infra_core,INFRA,Burgiss Infrastructure Equity Index (Core),0.313781,0.317175,-0.52266,-0.254047,unsmoothed,priority,20
+Senior Credit,2026-03-31,,20,senior_loan,PE,Burgiss Senior Loan Index,0.1409,0.201954,0.371147,0.624951,unsmoothed,priority,20
+Super-Core Infrastructure,2026-03-31,,20,ftse_fi_infra,INFRA,FTSE Fixed Income Core Infrastrue Index,-0.0235939,1.1134,0.180385,1.0806,unsmoothed,priority,20
+Venture Capital,2026-03-31,,20,vc,PE,Burgiss Venture Capital Index,0.830357,1.02287,-1.86829,0.512586,unsmoothed,priority,20
+국내 부동산,2024-12-31,,20,msci_gpfi,RE,MSCI Global Property Fund Index,0.15858,-0.198221,2.71726,-0.907462,unsmoothed,priority,20
+국내 사모투자,2026-03-31,,20,apac_equity,PE,Burgiss Equity Index (Asia & Pacific),0.316669,0.475989,-0.411185,-0.341466,unsmoothed,priority,20

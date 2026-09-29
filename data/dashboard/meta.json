@@ -1,0 +1,59 @@
+{
+  "run_id": "20260929T224451Z",
+  "factor_asof": "2026-09-15",
+  "last_full_quarter": "2026-06-30",
+  "alt_last_quarter": "2026-03-31",
+  "basis": [
+    "reported",
+    "unsmoothed"
+  ],
+  "methods": [
+    "ols",
+    "priority"
+  ],
+  "window_q": 20,
+  "table_basis": "unsmoothed",
+  "table_method": "priority",
+  "unsmoothing": {
+    "buyout": 1,
+    "vc": 1,
+    "fof_secondary": 1,
+    "fof_primary": 1,
+    "senior_loan": 0,
+    "mezzanine": 1,
+    "apac_equity": 1,
+    "hfri_fof_cons": 0,
+    "msci_gpfi": 1,
+    "re_noncore": 1,
+    "gl1": 0,
+    "gl2": 0,
+    "epra_nareit": 0,
+    "infra_core": 0,
+    "ftse_fi_infra": 0
+  },
+  "theta_mode": "rolling",
+  "n_rows_timeseries": 19968,
+  "programs": [
+    "Buyout",
+    "Core RE Debt",
+    "Core RE Equity",
+    "Core 국내 인프라",
+    "Core 해외 인프라",
+    "Fund of Fund",
+    "GP-Stake / Continuation Vehicle",
+    "Growth",
+    "Hedge Fund",
+    "Junior Credit",
+    "Listed RE",
+    "Long-term Core",
+    "Non-Core RE Debt",
+    "Non-Core RE Equity",
+    "Non-Core 국내 인프라",
+    "Non-Core 해외 인프라",
+    "Senior Credit",
+    "Super-Core Infrastructure",
+    "Venture Capital",
+    "국내 부동산",
+    "국내 사모투자"
+  ]
+}

@@ -68,6 +68,25 @@ Ensemble 의 R²_OOS (대 확장창 평균), 괄호는 AR(1):
 - OOS 34~57분기로 짧다. DM 검정 p 값은 참고용.
 - 팩터 4개(주식·금리·기대인플레·크레딧)만 쓴다. 부동산·인프라에는 실질금리·유동성·섹터 팩터 추가가 자연스러운 다음 단계다.
 
+## 대시보드 · DB 적재
+
+대시보드에 넣는 두 가지: **프로그램(엑셀 21 라벨) × 4팩터 최신 베타 표** 와 **베타 시계열**. 로데이터는 long 형식 하나뿐이다.
+
+```bash
+python scripts/export_dashboard.py        # → data/dashboard/beta_timeseries.csv (long), beta_latest.csv, factor_latest.csv, meta.json
+python scripts/load_db.py --schema        # → DB (환경변수 ALTNOW_DB_URL, 없으면 sqlite:///data/dashboard/altnow.db). 재실행해도 같은 키는 덮어씀
+ALTNOW_DB_URL=postgresql+psycopg2://user:pw@host/db python scripts/load_db.py
+```
+
+| 테이블 | 한 행 | 키 |
+|---|---|---|
+| `beta_timeseries` | (date, program, factor, basis, method, window_q) → beta, r2, n_obs, run_id | 6개 조합 |
+| `beta_latest` | program → growth/term/inflation/credit 최신 베타 + asof_quarter | (program, basis, method, window_q) |
+| `factor_latest` | factor → 최신 완전분기 수익률, 4분기, QTD, 연변동성 | factor |
+
+`basis` = reported/unsmoothed, `method` = ols(동시 OLS)/priority(팩터 우선순위 순차 배분), `window_q` = 20. 대시보드 기본 표는 `config/nowcast.yaml` `dashboard.table_basis/table_method` 로 고른다.
+DDL 은 `db/schema.sql`. 같은 원지수를 쓰는 라벨(Growth=VC 등)은 같은 값이 복제돼 들어간다 — 대시보드는 라벨로만 조회하면 된다.
+
 ## 구조
 
 ```
@@ -78,6 +97,7 @@ src/altnow/backtest.py     확장창 OOS
 src/altnow/nowcast.py      최신 nowcast (완전 분기 + QTD, 반복 예측)
 src/altnow/metrics.py      RMSE·MAE·적중률·R²_OOS·Diebold-Mariano
 src/altnow/plots.py        그림
-scripts/                   run_backtest · run_nowcast · make_report
+scripts/                   run_backtest · run_nowcast · run_unsmooth · run_eda · run_rolling_beta · run_factor_weights · export_dashboard · load_db · make_report
+db/schema.sql              대시보드 테이블 DDL
 tests/                     정합성 검사
 ```
